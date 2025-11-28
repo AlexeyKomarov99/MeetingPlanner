@@ -15,4 +15,4 @@ COPY . .
 RUN npm run build
 
 # Команда запуска
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]

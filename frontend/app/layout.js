@@ -1,4 +1,5 @@
-import './globals.css'
+import './global.css'
+import Header from "../components/ui/Header"
 
 export const metadata = {
   title: 'Meeting Planner',
@@ -8,7 +9,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-gray-50 text-gray-900">
+      <body>
+        <Header />
         <div className="min-h-screen">
           {children}
         </div>
