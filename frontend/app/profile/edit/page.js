@@ -2,7 +2,7 @@ import React from 'react'
 
 const page = () => {
   return (
-    <div>page</div>
+    <div className='w-full max-w-7xl mx-auto'>Edit profile</div>
   )
 }
 

@@ -4,11 +4,33 @@ import { persist } from 'zustand/middleware'
 const useStore = create(
     persist(
         (set) => ({
+            user: null,
+            accessToken: null,
+            refreshToken: null,
+            meetings: [],
+
             theme: 'light',
             lang: 'ru',
             accentColor: 'indigo',
-            user: null,
-        
+
+            login: (userData, tokens) => set({
+                user: userData,
+                accessToken: tokens.access,
+                refreshToken: tokens.refresh,
+                meetings: userData.meetings || []
+            }),
+            logout: () => set({ 
+                user: null, 
+                accessToken: null, 
+                refreshToken: null,
+                meetings: [] 
+            }),
+            refreshTokens: (tokens) => set({
+                accessToken: tokens.access,
+                refreshToken: tokens.refresh
+            }),
+            updateMeetings: (meetings) => set({ meetings }),
+            
             toggleTheme: () => set((state) => ({
                 theme: state.theme === 'light' ? 'dark' : 'light'
             })),

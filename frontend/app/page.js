@@ -1,15 +1,19 @@
 'use client'
-
-import useStore from '../lib/store'
 import { meetingsAPI } from '../lib/api'
 import { useEffect, useState } from 'react'
+//===== utils =====//
+import getTime from '../utils/timeFormat'
+import getDayNumber from '../utils/dayFormat'
+import getMonthName from '../utils/monthFormat'
+import getYearNumber from '../utils/yearFormat'
+//===== components =====//
+import { MeetingCard } from '../components/ui/MeetingCard'
 
 export default function Home() {
-  const { theme, user } = useStore()
+
   const [meetings, setMeetings] = useState([])
   const [loading, setLoading] = useState(true)
 
-  // Загрузка встреч при монтировании
   useEffect(() => {
     loadMeetings()
   }, [])
@@ -21,78 +25,77 @@ export default function Home() {
       setMeetings(response.data)
     } catch (error) {
       console.error('Ошибка загрузки встреч:', error)
-    } finally {
+    }
+    finally {
       setLoading(false)
     }
   }
 
+  const meetingsFormatted = meetings.map((meeting) => {
+    return {
+      id: meeting.id,
+      title: meeting.title,
+      description: meeting.description,
+      start_time: {
+        day: getDayNumber(meeting.start_time),
+        month: getMonthName(meeting.start_time),
+        year: getYearNumber(meeting.start_time),
+        time: getTime(meeting.start_time),
+      },
+      end_time: {
+        day: getDayNumber(meeting.end_time),
+        month: getMonthName(meeting.end_time),
+        year: getYearNumber(meeting.end_time),
+        time: getTime(meeting.end_time),
+      },
+      location: meeting.location,
+      creator: meeting.creator_id
+    }
+  })
+
   return (
-    <main className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Заголовок */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Ваши встречи
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Планируйте и управляйте встречами эффективно. Создавайте события, 
-            приглашайте участников и отслеживайте статусы.
-          </p>
+    <main className='bg-[var(--bg-primary)] '>
+      <div className='w-full max-w-7xl mx-auto min-height: 100vh pt-5 pb-5'>
+        <h2 className='mb-5'>Предстоящие встречи</h2>
+
+        <div className='flex space-x-5 mb-5'>
+          <span className='bg-[var(--bg-secondary)] px-4 py-2 rounded-lg cursor-pointer'>Все</span>
+          <span className='bg-[var(--bg-secondary)] px-4 py-2 rounded-lg cursor-pointer'>Предстоящие</span>
+          <span className='bg-[var(--bg-secondary)] px-4 py-2 rounded-lg cursor-pointer'>Прошедшие</span>
+          <span className='bg-[var(--bg-secondary)] px-4 py-2 rounded-lg cursor-pointer'>Созданные мною</span>
         </div>
 
-        {/* Кнопка создания встречи */}
-        <div className="text-center mb-12">
-          <button className="bg-indigo-500 text-white px-8 py-4 rounded-xl hover:bg-indigo-600 transition-colors shadow-lg font-semibold text-lg">
-            + Создать новую встречу
-          </button>
-        </div>
-
-        {/* Список встреч */}
-        <div className="space-y-6">
+        <div>
           {loading ? (
             // Загрузка
             <div className="text-center py-12">
-              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
-              <p className="mt-4 text-gray-600">Загружаем встречи...</p>
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--text-accent)]"></div>
+              <p className="mt-4 text-[var(--text-primary)]">Загружаем встречи...</p>
             </div>
-          ) : meetings.length === 0 ? (
-            // Пустой список
-            <div className="text-center py-12 bg-white rounded-2xl shadow-sm border">
-              <div className="text-6xl mb-4">📅</div>
-              <h3 className="text-2xl font-semibold text-gray-900 mb-2">
-                Пока нет встреч
-              </h3>
-              <p className="text-gray-600 max-w-md mx-auto">
-                Создайте первую встречу и пригласите участников
-              </p>
-            </div>
-          ) : (
-            // Список встреч
-            meetings.map((meeting) => (
-              <div key={meeting.id} className="bg-white p-6 rounded-2xl shadow-sm border hover:shadow-md transition-shadow">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                      {meeting.title}
-                    </h3>
-                    <p className="text-gray-600 mb-3">
-                      {meeting.description}
-                    </p>
-                    <div className="flex items-center space-x-4 text-sm text-gray-500">
-                      <span>🗓️ {new Date(meeting.start_time).toLocaleDateString()}</span>
-                      <span>⏰ {new Date(meeting.start_time).toLocaleTimeString()}</span>
-                      <span>📍 {meeting.location}</span>
-                    </div>
-                  </div>
-                  <button className="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg text-gray-700 transition-colors">
-                    Подробнее
-                  </button>
-                </div>
+          ) : meetingsFormatted.length === 0 ? (
+              // Пустой список
+              <div className="text-center py-12 bg-white rounded-2xl shadow-sm border">
+                <div className="text-6xl mb-4">📅</div>
+                <h3 className="text-2xl font-semibold text-gray-900 mb-2">
+                  Пока нет встреч
+                </h3>
+                <p className="text-[var(--text-primary)] max-w-md mx-auto">
+                  Создайте первую встречу и пригласите участников
+                </p>
               </div>
-            ))
-          )}
+            ) : (
+              // Список встреч
+              <div className='grid grid-cols-3 gap-4'>
+                {meetingsFormatted.map((meeting) => (
+                  <MeetingCard 
+                    key={meeting.id}  
+                    meeting={meeting} 
+                  />
+                ))}
+              </div>
+            )}
         </div>
+
 
       </div>
     </main>

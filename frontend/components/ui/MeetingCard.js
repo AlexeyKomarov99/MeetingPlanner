@@ -1,69 +1,43 @@
 'use client'
-
 import Link from 'next/link'
+//===== assets =====//
+import { IoCalendarOutline as CalendarIcon } from "react-icons/io5"
+import { LuClock as ClockIcon } from "react-icons/lu"
+import { RiMapPinLine as LocationMapIcon } from "react-icons/ri"
 
-export default function MeetingCard({ meeting }) {
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('ru-RU', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    })
-  }
-
-  const formatTime = (dateString) => {
-    return new Date(dateString).toLocaleTimeString('ru-RU', {
-      hour: '2-digit',
-      minute: '2-digit'
-    })
-  }
-
+export const MeetingCard = ({meeting}) => {
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-sm border hover:shadow-md transition-shadow">
-      <div className="flex justify-between items-start mb-4">
-        <div className="flex-1">
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">
-            {meeting.title}
-          </h3>
-          <p className="text-gray-600 mb-4 line-clamp-2">
-            {meeting.description}
-          </p>
-          
-          <div className="flex items-center space-x-6 text-sm text-gray-500 mb-4">
-            <div className="flex items-center space-x-2">
-              <span>🗓️</span>
-              <span>{formatDate(meeting.start_time)}</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <span>⏰</span>
-              <span>{formatTime(meeting.start_time)} - {formatTime(meeting.end_time)}</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <span>📍</span>
-              <span>{meeting.location}</span>
-            </div>
-          </div>
-
-          {/* Участники (заглушка) */}
-          <div className="flex items-center space-x-2">
-            <div className="flex -space-x-2">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="w-8 h-8 bg-indigo-100 border-2 border-white rounded-full flex items-center justify-center text-indigo-600 text-xs font-medium">
-                  {i}
-                </div>
-              ))}
-            </div>
-            <span className="text-sm text-gray-500">+3 участника</span>
-          </div>
+    <article className='border border-[var(--border-light)] rounded-lg p-6'>
+      <h5 className='text-[var(--text-primary)] mb-2'>{meeting.title}</h5>
+      
+      <div className='flex flex-col mb-2'>
+        <div className='flex items-center space-x-1'>
+          <CalendarIcon className='icon' style={{color: 'var(--text-secondary)'}} />
+          <span className='text-[var(--text-secondary)]'>{meeting.start_time.month} </span>
+          <span className='text-[var(--text-secondary)]'>{meeting.start_time.day}, </span>
+          <span className='text-[var(--text-secondary)]'>{meeting.start_time.year}</span>
         </div>
 
-        <Link 
-          href={`/meetings/${meeting.id}`}
-          className="bg-indigo-500 hover:bg-indigo-600 px-4 py-2 rounded-lg text-white transition-colors font-medium"
-        >
-          Подробнее
-        </Link>
+        <div className='flex items-center space-x-1'>
+          <ClockIcon className='icon' style={{color: 'var(--text-secondary)'}} />
+          <span className='text-[var(--text-secondary)]'>{meeting.start_time.time} -</span>
+          <span className='text-[var(--text-secondary)]'>{meeting.end_time.time}</span>
+        </div>
+
+        <div className='flex items-center space-x-1'>
+          <LocationMapIcon className='icon' style={{color: 'var(--text-secondary)'}} />
+          <span className='text-[var(--text-secondary)]'>{meeting.location}</span>
+        </div>
       </div>
-    </div>
+
+      <span className='leading-none'>{meeting.description}</span>
+
+      <div className='border-t border-[var(--border-light)] mb-4 mt-4'></div>
+
+      <div className='w-full flex justify-end'>
+        <Link href={`/meetings/${meeting.id}`} className='btn-transparent'>Подробнее</Link>
+      </div>
+
+    </article>
   )
 }

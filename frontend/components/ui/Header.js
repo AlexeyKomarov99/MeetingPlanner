@@ -1,45 +1,46 @@
 'use client'
+import { useEffect } from 'react';
 import useStore from '../../lib/store'
+import Link from 'next/link'
+//===== assets =====//
+import { FiSun as SunIcon } from "react-icons/fi";
+import { FiMoon as MoonIcon } from "react-icons/fi";
+//===== components =====//
+import Logo from './Logo';
 
 const Header = () => {
     
     const {theme, toggleTheme, user} = useStore();
-  
+    const userFullname = user ? user.fullname : 'Иванов Иван';
+
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme);
+    }, [theme]);
+
     return (
-        <header className="bg-white shadow-sm border-b">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center h-16">
-                {/* Логотип и название */}
-                <div className="flex items-center">
-                    <h1 className="text-xl font-bold text-gray-900">
-                    Meeting Planner
-                    </h1>
-                </div>
+        <header className='bg-[var(--bg-primary)]'>
+            <div className='w-full max-w-7xl mx-auto py-5 flex justify-between items-center'>
+                <Logo />
 
-                {/* Правая часть */}
-                <div className="flex items-center space-x-4">
-                    {/* Кнопка переключения темы */}
-                    <button
-                    onClick={toggleTheme}
-                    className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
+                <div className='space-x-8 flex items-center'>
+                    <Link href='/' className='text-[var(--text-primary)] hover:text-[var(--text-accent)]'>
+                        Главная
+                    </Link>
+                    <Link href='/profile' className='text-[var(--text-primary)] hover:text-[var(--text-accent)]'>
+                        Профиль
+                    </Link>
+                </div>
+                
+                <div className='flex items-center space-x-4'>
+                    <div
+                        onClick={toggleTheme}
                     >
-                    {theme === 'light' ? '🌙' : '☀️'}
-                    </button>
-
-                    {/* Профиль пользователя */}
-                    {user ? (
-                    <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center text-white text-sm">
-                        {user.name?.charAt(0) || 'U'}
-                        </div>
-                        <span className="text-sm text-gray-700">{user.name}</span>
+                        {theme === 'light' && <SunIcon className='icon'/>}
+                        {theme === 'dark' && <MoonIcon className='icon'/>}
                     </div>
-                    ) : (
-                    <button className="text-sm text-gray-700 hover:text-gray-900">
-                        Войти
-                    </button>
-                    )}
-                </div>
+                    <div>
+                        {userFullname}
+                    </div>
                 </div>
             </div>
         </header>

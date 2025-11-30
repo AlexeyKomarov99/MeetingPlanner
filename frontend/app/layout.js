@@ -1,5 +1,5 @@
 import './global.css'
-import Header from "../components/ui/Header"
+import HeaderWrapper from '../components/ui/HeaderWrapper'
 
 export const metadata = {
   title: 'Meeting Planner',
@@ -7,10 +7,11 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }) {
+
   return (
     <html lang="en">
       <body>
-        <Header />
+        <HeaderWrapper />
         <div className="min-h-screen">
           {children}
         </div>
