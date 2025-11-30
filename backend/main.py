@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database.database import engine, Base
-from routers import users, meetings
+from routers import users, meetings, auth
 import seed_data
 
 # Создаем таблицы в БД
@@ -23,6 +23,7 @@ app.add_middleware(
 # Подключаем роутеры
 app.include_router(users.router, prefix="/api/users", tags=["users"])
 app.include_router(meetings.router, prefix="/api/meetings", tags=["meetings"])
+app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 
 @app.get("/")
 def read_root():

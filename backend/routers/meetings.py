@@ -22,3 +22,16 @@ def get_meetings(db: Session = Depends(get_db)):
     # Получаем все встречи из БД
     meetings = db.query(Meeting).all()
     return meetings
+
+# GET /api/meetings/:id - детальное описание одного мероприятия
+@router.get("/{meeting_id}", response_model=MeetingResponse)
+def get_meeting(meeting_id: int, db: Session = Depends(get_db)):
+    print(f"🔍 Поиск встречи с ID: {meeting_id}")  # ← ДОБАВЬ
+    
+    meeting = db.query(Meeting).filter(Meeting.id == meeting_id).first()
+    
+    print(f"📊 Найдена встреча: {meeting}")  # ← ДОБАВЬ
+    
+    if not meeting:
+        raise HTTPException(status_code=404, detail="Meeting not found")
+    return meeting
