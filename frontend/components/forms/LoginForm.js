@@ -4,15 +4,25 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema } from '../../lib/validation';
 import Link from 'next/link';
+import { authAPI } from '../../lib/api';
+import useStore from '../../lib/store';
+import { useRouter } from 'next/navigation';
 
 const LoginForm = () => {
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: zodResolver(loginSchema)
     });
+    const { login } = useStore();
+    const router = useRouter();
 
     const onSubmit = async (data) => {
-        console.log('Login data:', data);
-        // TODO: API call
+        try {
+            const response = await authAPI.login(data);
+            login(response.data.user, response.data.tokens);
+            router.push('/');
+        } catch (error) {
+            console.error('Ошибка входа:', error);
+        }
     };
     
     return (

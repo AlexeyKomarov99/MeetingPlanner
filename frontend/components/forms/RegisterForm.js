@@ -1,18 +1,34 @@
 'use client'
-import React from 'react'
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { registerSchema } from '../../lib/validation';
-import Link from 'next/link';
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { registerSchema } from '../../lib/validation'
+import Link from 'next/link'
+import { authAPI } from '../../lib/api';
+import useStore from '../../lib/store'
+import { useRouter } from 'next/navigation'
 
 function RegisterForm() {
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
         resolver: zodResolver(registerSchema)
     });
+    const router = useRouter()
+    const {login} = useStore()
 
     const onSubmit = async (data) => {
-        console.log('Registr data:', data);
-        // TODO: API call
+        try {
+            const response = await authAPI.register({
+                name: data.name,
+                surname: data.surname,
+                email: data.email,
+                password: data.password
+            })
+            
+            login(response.data.user, response.data.tokens)
+            router.push('/')
+            
+        } catch (error) {
+            console.error('Ошибка регистрации:', error);
+        }
     };
 
     return (
