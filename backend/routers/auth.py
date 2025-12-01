@@ -43,6 +43,8 @@ async def login(credentials: LoginSchema, db: AsyncSession = Depends(get_db)):
 
 @router.post("/register", response_model=LoginResponse)
 async def register(user_data: UserCreate, db: AsyncSession = Depends(get_db)):
+    
+    print(user_data)
     # Проверяем нет ли пользователя с таким email
     result = await db.execute(select(User).where(User.email == user_data.email))
     existing_user = result.scalar_one_or_none()

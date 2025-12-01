@@ -1,13 +1,9 @@
+import asyncio
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database.database import engine, Base
 from routers import users, meetings, auth
 import seed_data
-
-# Создаем таблицы в БД
-Base.metadata.create_all(bind=engine)
-
-seed_data.create_sample_data()
 
 app = FastAPI(title="Meeting Planner API")
 
@@ -21,9 +17,18 @@ app.add_middleware(
 )
 
 # Подключаем роутеры
+app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(users.router, prefix="/api/users", tags=["users"])
 app.include_router(meetings.router, prefix="/api/meetings", tags=["meetings"])
-app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
+
+@app.on_event("startup")
+async def startup_event():
+    # Создаем таблицы при запуске приложения
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    
+    # Заполняем тестовыми данными
+    await seed_data.create_sample_data()
 
 @app.get("/")
 def read_root():
