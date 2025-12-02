@@ -1,4 +1,3 @@
-# routers/auth.py
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -12,6 +11,7 @@ from schemas.user import UserCreate
 
 router = APIRouter()
 
+# POST /api/auth/login - вход пользователя
 @router.post("/login", response_model=LoginResponse)
 async def login(credentials: LoginSchema, db: AsyncSession = Depends(get_db)):
     # Ищем пользователя
@@ -21,7 +21,7 @@ async def login(credentials: LoginSchema, db: AsyncSession = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=401, detail="Неверный email или пароль")
     
-    # Проверяем пароль
+    # Проверяем пароль (убедитесь, что хеш в базе хранится как строка)
     if not bcrypt.checkpw(credentials.password.encode(), user.hashed_password.encode()):
         raise HTTPException(status_code=401, detail="Неверный email или пароль")
     
@@ -41,6 +41,7 @@ async def login(credentials: LoginSchema, db: AsyncSession = Depends(get_db)):
         "tokens": tokens
     }
 
+# POST /api/auth/register - регистрация нового пользователя
 @router.post("/register", response_model=LoginResponse)
 async def register(user_data: UserCreate, db: AsyncSession = Depends(get_db)):
     
