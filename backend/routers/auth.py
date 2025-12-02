@@ -34,7 +34,7 @@ async def get_user_with_meetings(user_id: UUID, db: AsyncSession):
     # Получаем встречи, в которых пользователь участвует
     result = await db.execute(
         select(Meeting)
-        .join(Participant, Participant.meeting_id == Meeting.id)
+        .join(Participant, Participant.meeting_id == Meeting.meeting_id)
         .where(Participant.user_id == user_id)
     )
     participating_meetings = result.scalars().all()

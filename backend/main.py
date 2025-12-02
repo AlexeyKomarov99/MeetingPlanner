@@ -3,7 +3,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database.database import engine, Base
 from routers import users, meetings, auth
-import seed_data
 
 app = FastAPI(title="Meeting Planner API")
 
@@ -27,8 +26,10 @@ async def startup_event():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     
+    # Импортируем seed_data ТОЛЬКО здесь
+    from seed_data import create_sample_data
     # Заполняем тестовыми данными
-    await seed_data.create_sample_data()
+    await create_sample_data()
 
 @app.get("/")
 def read_root():

@@ -15,7 +15,7 @@ class Meeting(Base):
     __tablename__ = "meetings"
 
     meeting_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    creator_id = Column(UUID, ForeignKey("users.user_id"))
+    creator_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id"))
     title = Column(String(200), nullable=False)
     description = Column(Text)
     start_time = Column(DateTime, nullable=False)
