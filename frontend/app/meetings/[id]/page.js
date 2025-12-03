@@ -111,7 +111,10 @@ const page = () => {
       <div className='flex justify-between'>
         <h2 className='text-[var(--text-primary)] mb-2'>{title}</h2>
         <div className='flex space-x-3'>
-          <div className='flex items-center justify-center px-4 py-1 rounded-lg cursor-pointer bg-[var(--bg-accent)] text-[#fff] hover:opacity-90 transition-all duration-200'>Изменить мероприятие</div>
+          <Link
+            href={`${meeting.meeting_id}/edit`}
+            className='flex items-center justify-center px-4 py-1 rounded-lg cursor-pointer bg-[var(--bg-accent)] text-[#fff] hover:opacity-90 transition-all duration-200'
+            >Изменить мероприятие</Link>
           <div 
             className='flex items-center justify-center px-4 py-1 rounded-lg cursor-pointer bg-red-500 text-[#fff] hover:bg-red-600 transition-all duration-200'
             onClick={openDeleteModal}
