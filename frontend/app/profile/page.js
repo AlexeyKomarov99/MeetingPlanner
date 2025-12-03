@@ -9,8 +9,8 @@ const page = () => {
 
   const {user} = useStore()
 
-  const photo = user ? user.photo : <LuCircleUserRound className='' style={{width: '96px', height: '96px'}} />
-  const fullName = user ? user.fullname : 'Иванов Иван'
+  const photo = user ? user?.photo : <LuCircleUserRound className='' style={{width: '96px', height: '96px'}} />
+  const fullName = user ? `${user?.name} ${user?.surname}` : 'Default'
   const email = user ? user.email : 'Ivanov@yandex.ru'
 
   return (

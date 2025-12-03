@@ -11,7 +11,7 @@ import Logo from './Logo';
 const Header = () => {
     
     const {theme, toggleTheme, user} = useStore();
-    const userFullname = user ? user.fullname : 'Иванов Иван';
+    const userFullname = user ? `${user?.name} ${user?.surname}` : 'Default'
 
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', theme);

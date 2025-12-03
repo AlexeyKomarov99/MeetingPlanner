@@ -35,7 +35,7 @@ export const MeetingCard = ({meeting}) => {
       <div className='border-t border-[var(--border-light)] mb-4 mt-4'></div>
 
       <div className='w-full flex justify-end'>
-        <Link href={`/meetings/${meeting.id}`} className='btn-transparent'>Подробнее</Link>
+        <Link href={`/meetings/${meeting.meeting_id}`} className='btn-transparent'>Подробнее</Link>
       </div>
 
     </article>
