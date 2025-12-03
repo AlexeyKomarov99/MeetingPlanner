@@ -62,7 +62,7 @@ const useStore = create(
                 },
                 lastUpdate: Date.now()
             })),
-            addMeetings: (newMeeting) => set((state) => ({
+            addMeeting: (newMeeting) => set((state) => ({
                 user: {
                     ...state.user,
                     created_meetings: [
@@ -71,7 +71,23 @@ const useStore = create(
                     ]
                 },
                 lastUpdate: Date.now()
-            }))
+            })),
+            updateMeeting: (meetingId, updatedMeeting) => set((state) => ({
+                user: {
+                    ...state.user,
+                    created_meetings: state.user?.created_meetings?.map(meeting => 
+                        meeting.meeting_id.toString() === meetingId.toString() 
+                            ? { ...meeting, ...updatedMeeting } 
+                            : meeting
+                    ),
+                    participating_meetings: state.user?.participating_meetings?.map(meeting => 
+                        meeting.meeting_id.toString() === meetingId.toString() 
+                            ? { ...meeting, ...updatedMeeting } 
+                            : meeting
+                    )
+                },
+                lastUpdate: Date.now()
+            })),
         }),
         {
             name: 'meeting-planner-storage'

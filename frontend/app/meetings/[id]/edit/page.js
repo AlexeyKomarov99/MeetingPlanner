@@ -7,14 +7,13 @@ import { meetingsAPI } from '../../../../lib/api'
 import useStore from '../../../../lib/store'
 //===== icons =====//
 import { MdKeyboardArrowLeft as ArrowLeftIcon } from "react-icons/md"
-import { IoCalendarOutline as CalendarIcon } from "react-icons/io5"
 import { LuClock as ClockIcon } from "react-icons/lu"
 import { RiMapPinLine as LocationMapIcon } from "react-icons/ri"
 
 export default function EditMeetingPage() {
   const params = useParams()
   const router = useRouter()
-  const { updateMeetings } = useStore()
+  const { updateMeeting } = useStore()
   
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -28,7 +27,7 @@ export default function EditMeetingPage() {
     location_type: 'office',
     start_time: '',
     end_time: '',
-    status: 'PLANNED'
+    status: 'planned'
   })
 
   // Загружаем данные встречи
@@ -84,9 +83,8 @@ export default function EditMeetingPage() {
     try {
       const response = await meetingsAPI.updateMeeting(params.id, formData)
       
-      // Обновляем store (нужно будет добавить метод updateMeeting в store)
-      // updateMeetingInStore(params.id, response.data)
-      
+      updateMeeting(params.id, response.data)
+
       router.push(`/meetings/${params.id}`)
       router.refresh()
     } catch (error) {
@@ -121,8 +119,8 @@ export default function EditMeetingPage() {
   }
 
   return (
-    <div className='w-full max-w-7xl mx-auto'>
-      {/* Хлебные крошки */}
+    <div className='w-full max-w-7xl mx-auto mb-20'>
+      {/* Внутренняя навигация по пути мероприятий */}
       <div className='flex items-center gap-2 mb-6 text-sm'>
         <Link 
           href="/" 
@@ -163,7 +161,7 @@ export default function EditMeetingPage() {
             {/* Название */}
             <div>
               <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
-                Название встречи *
+                Название встречи
               </label>
               <input
                 type="text"
@@ -171,7 +169,7 @@ export default function EditMeetingPage() {
                 value={formData.title}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-[var(--border-light)] rounded-lg bg-[var(--bg-primary)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--bg-accent)] focus:border-transparent"
+                className="w-full px-4 py-2 border border-[var(--border-light)] rounded-lg bg-[var(--bg-primary)] text-[var(--text-primary)] hover:border-[var(--text-accent)!important] transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--bg-accent)] focus:border-transparent"
                 placeholder="Введите название встречи"
               />
             </div>
@@ -186,7 +184,7 @@ export default function EditMeetingPage() {
                 value={formData.description}
                 onChange={handleChange}
                 rows="4"
-                className="w-full px-4 py-2 border border-[var(--border-light)] rounded-lg bg-[var(--bg-primary)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--bg-accent)] focus:border-transparent"
+                className="w-full px-4 py-2 border border-[var(--border-light)] rounded-lg bg-[var(--bg-primary)] text-[var(--text-primary)] hover:border-[var(--text-accent)!important] transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--bg-accent)] focus:border-transparent"
                 placeholder="Опишите детали встречи"
               />
             </div>
@@ -202,7 +200,7 @@ export default function EditMeetingPage() {
             <div>
               <label className="flex items-center text-sm font-medium text-[var(--text-primary)] mb-2">
                 <ClockIcon className="mr-2" />
-                Начало встречи *
+                Начало встречи
               </label>
               <input
                 type="datetime-local"
@@ -210,7 +208,7 @@ export default function EditMeetingPage() {
                 value={formData.start_time}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-[var(--border-light)] rounded-lg bg-[var(--bg-primary)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--bg-accent)] focus:border-transparent"
+                className="w-full px-4 py-2 border border-[var(--border-light)] rounded-lg bg-[var(--bg-primary)] text-[var(--text-primary)] hover:border-[var(--text-accent)!important] transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--bg-accent)] focus:border-transparent"
               />
             </div>
 
@@ -218,7 +216,7 @@ export default function EditMeetingPage() {
             <div>
               <label className="flex items-center text-sm font-medium text-[var(--text-primary)] mb-2">
                 <ClockIcon className="mr-2" />
-                Окончание встречи *
+                Окончание встречи
               </label>
               <input
                 type="datetime-local"
@@ -226,7 +224,7 @@ export default function EditMeetingPage() {
                 value={formData.end_time}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-[var(--border-light)] rounded-lg bg-[var(--bg-primary)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--bg-accent)] focus:border-transparent"
+                className="w-full px-4 py-2 border border-[var(--border-light)] rounded-lg bg-[var(--bg-primary)] text-[var(--text-primary)] hover:border-[var(--text-accent)!important] transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--bg-accent)] focus:border-transparent"
               />
             </div>
           </div>
@@ -246,7 +244,7 @@ export default function EditMeetingPage() {
                 name="location_type"
                 value={formData.location_type}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-[var(--border-light)] rounded-lg bg-[var(--bg-primary)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--bg-accent)] focus:border-transparent"
+                className="w-full px-4 py-2 border border-[var(--border-light)] rounded-lg bg-[var(--bg-primary)] text-[var(--text-primary)] hover:border-[var(--text-accent)!important] transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--bg-accent)] focus:border-transparent"
               >
                 <option value="office">Офис</option>
                 <option value="cafe">Кафе</option>
@@ -260,7 +258,7 @@ export default function EditMeetingPage() {
             <div>
               <label className="flex items-center text-sm font-medium text-[var(--text-primary)] mb-2">
                 <LocationMapIcon className="mr-2" />
-                Адрес или ссылка *
+                Адрес или ссылка
               </label>
               <input
                 type="text"
@@ -268,7 +266,7 @@ export default function EditMeetingPage() {
                 value={formData.location}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-[var(--border-light)] rounded-lg bg-[var(--bg-primary)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--bg-accent)] focus:border-transparent"
+                className="w-full px-4 py-2 border border-[var(--border-light)] rounded-lg bg-[var(--bg-primary)] text-[var(--text-primary)] hover:border-[var(--text-accent)!important] transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--bg-accent)] focus:border-transparent"
                 placeholder="Например: ул. Ленина, 15 или Zoom-ссылка"
               />
             </div>
@@ -281,17 +279,17 @@ export default function EditMeetingPage() {
           
           <div className="flex flex-wrap gap-3">
             {[
-              { value: 'PLANNED', label: 'Запланирована', color: 'bg-yellow-500' },
-              { value: 'ACTIVE', label: 'Активна', color: 'bg-blue-500' },
-              { value: 'COMPLETED', label: 'Завершена', color: 'bg-green-500' },
-              { value: 'CANCELLED', label: 'Отменена', color: 'bg-red-500' },
-              { value: 'POSTPONED', label: 'Перенесена', color: 'bg-orange-500' }
+              { value: 'planned', label: 'Запланирована', color: 'bg-yellow-500' },
+              { value: 'active', label: 'Активна', color: 'bg-blue-500' },
+              { value: 'completed', label: 'Завершена', color: 'bg-green-500' },
+              { value: 'cancelled', label: 'Отменена', color: 'bg-red-500' },
+              { value: 'postponed', label: 'Перенесена', color: 'bg-orange-500' }
             ].map((status) => (
               <button
                 key={status.value}
                 type="button"
                 onClick={() => setFormData(prev => ({ ...prev, status: status.value }))}
-                className={`px-4 py-2 rounded-lg cursor-pointer transition-colors ${
+                className={`px-4 py-2 rounded-lg border border-[var(--border-light)]  cursor-pointer ${
                   formData.status === status.value 
                     ? `${status.color} text-white` 
                     : 'bg-[var(--bg-secondary)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]'
