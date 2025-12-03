@@ -59,7 +59,18 @@ const useStore = create(
                     ...state.user,
                     created_meetings: meetingsData.created_meetings || [],
                     participating_meetings: meetingsData.participating_meetings || []
-                }
+                },
+                lastUpdate: Date.now()
+            })),
+            addMeetings: (newMeeting) => set((state) => ({
+                user: {
+                    ...state.user,
+                    created_meetings: [
+                        ...(state.user?.created_meetings || []),
+                        newMeeting
+                    ]
+                },
+                lastUpdate: Date.now()
             }))
         }),
         {

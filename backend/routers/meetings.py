@@ -5,6 +5,9 @@ from database.database import get_db
 from models.meeting import Meeting
 from schemas.meeting import MeetingCreate, MeetingResponse, MeetingUpdate, MeetingDeleteResponse
 from uuid import UUID
+from routers.auth import get_current_user
+from models.user import User
+from datetime import datetime, timezone
 
 router = APIRouter()
 
@@ -18,9 +21,19 @@ async def get_meetings(db: AsyncSession = Depends(get_db)):
 
 # POST /api/meetings/ - создание встречи
 @router.post("/", response_model=MeetingResponse)
-async def create_meeting(meeting: MeetingCreate, db: AsyncSession = Depends(get_db)):
-    # Создаем встречу (пока creator_id=1 - временно)
-    db_meeting = Meeting(**meeting.dict(), creator_id=1)
+async def create_meeting(
+    meeting: MeetingCreate, 
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # Удаляем timezone info
+    meeting_data = meeting.dict()
+    if meeting_data['start_time'].tzinfo is not None:
+        meeting_data['start_time'] = meeting_data['start_time'].replace(tzinfo=None)
+    if meeting_data['end_time'].tzinfo is not None:
+        meeting_data['end_time'] = meeting_data['end_time'].replace(tzinfo=None)
+    
+    db_meeting = Meeting(**meeting_data, creator_id=current_user.user_id)
     db.add(db_meeting)
     await db.commit()
     await db.refresh(db_meeting)
