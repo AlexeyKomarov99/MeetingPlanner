@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 //===== utils =====//
 import getTime from '../utils/timeFormat'
 import getDayNumber from '../utils/dayFormat'
@@ -15,8 +16,20 @@ import MeetingCardSkeleton from '../components/ui/MeetingCardSkeleton'
 export default function Home() {
   const [filter, setFilter] = useState('all')
   const [isLoading, setIsLoading] = useState(false)
-  const { user, lastUpdate } = useStore()
+  const { user, lastUpdate, accessToken } = useStore()
   const [visibleCount, setVisibleCount] = useState(10)
+  const [hasChecked, setHasChecked] = useState(false)
+  
+  // Редирект, если пользователь не авторизован
+  useEffect(() => {
+    if (hasChecked) return;
+    
+    if (!accessToken) {
+      redirect('/auth/login');
+    }
+    
+    setHasChecked(true);
+  }, [accessToken, hasChecked]);
 
   // Статусы с сервера
   const statuses = [
@@ -82,8 +95,6 @@ export default function Home() {
       return () => clearTimeout(timer)
     }
   }, [user, lastUpdate])
-
-  console.log(user)
 
   return (
     <div className='w-full max-w-7xl mx-auto pt-5 pb-5'>
@@ -158,7 +169,7 @@ export default function Home() {
               {visibleMeetings.map((meeting) => (
                 <MeetingCard 
                   key={meeting.meeting_id}  
-                  meeting={meeting} 
+                  meeting={meeting}
                 />
               ))}
             </div>
@@ -168,7 +179,7 @@ export default function Home() {
               <div className="flex justify-center mt-8">
                 <button
                   onClick={loadMore}
-                  className="px-6 py-3 rounded-lg border border-[var(--border-light)] text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] transition-colors duration-200"
+                  className="px-6 py-3 rounded-lg bg-[var(--bg-accent)] text-white hover:opacity-90 transition-opacity duration-200"
                 >
                   Показать еще ({meetingsFormatted.length - visibleCount})
                 </button>

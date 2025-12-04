@@ -48,6 +48,7 @@ export const authAPI = {
   register: (userData) => api.post('/api/auth/register', userData),
   logout: () => api.post('/api/auth/logout'),
   refresh: (refreshToken) => api.post('/api/auth/refresh', { refresh: refreshToken })
+  
 }
 
 export const meetingsAPI = {

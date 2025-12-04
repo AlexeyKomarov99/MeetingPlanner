@@ -1,14 +1,43 @@
 'use client'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 //===== assets =====//
 import { IoCalendarOutline as CalendarIcon } from "react-icons/io5"
 import { LuClock as ClockIcon } from "react-icons/lu"
 import { RiMapPinLine as LocationMapIcon } from "react-icons/ri"
 
-export const MeetingCard = ({meeting}) => {
+export const MeetingCard = ({ meeting }) => {
+  const pathname = usePathname()
+  
+  const isProfilePage = pathname?.includes('/profile')
+  
+  const statusColors = {
+    planned: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+    active: 'bg-blue-100 text-blue-800 border-blue-200',
+    completed: 'bg-green-100 text-green-800 border-green-200',
+    cancelled: 'bg-red-100 text-red-800 border-red-200',
+    postponed: 'bg-orange-100 text-orange-800 border-orange-200'
+  }
+  
+  const statusLabels = {
+    planned: 'Запланировано',
+    active: 'Активно',
+    completed: 'Завершено',
+    cancelled: 'Отменено',
+    postponed: 'Перенесено'
+  }
+
   return (
     <article className='border border-[var(--border-light)] rounded-lg p-6 flex flex-col h-[350px]'>
-      <h5 className='text-[var(--text-primary)] mb-2 line-clamp-1'>{meeting.title}</h5>
+      <div className='flex justify-between items-start mb-2'>
+        <h5 className='text-[var(--text-primary)] line-clamp-1 flex-1'>{meeting.title}</h5>
+        
+        {isProfilePage && meeting.status && meeting.status !== 'all' && (
+          <span className={`ml-2 px-3 py-1 text-xs font-medium rounded-full border ${statusColors[meeting.status] || 'bg-gray-100 text-gray-800 border-gray-200'}`}>
+            {statusLabels[meeting.status] || meeting.status}
+          </span>
+        )}
+      </div>
       
       <div className='flex flex-col mb-2'>
         <div className='flex items-center space-x-1'>
@@ -41,7 +70,6 @@ export const MeetingCard = ({meeting}) => {
       <div className='w-full flex justify-end mt-auto'>
         <Link href={`/meetings/${meeting.meeting_id}`} className='btn-transparent'>Подробнее</Link>
       </div>
-
     </article>
   )
 }
