@@ -24,11 +24,13 @@ const useStore = create(
                 user: null, 
                 accessToken: null, 
                 refreshToken: null,
-                meetings: [] 
+                meetings: [],
+                lastUpdate: Date.now() 
             }),
             refreshTokens: (tokens) => set({
                 accessToken: tokens.access,
-                refreshToken: tokens.refresh
+                refreshToken: tokens.refresh,
+                lastUpdate: Date.now() 
             }),
             
             toggleTheme: () => set((state) => ({
