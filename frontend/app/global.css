@@ -124,6 +124,36 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
 }
 
+/* Обрезание текста с многоточием после N строк */
+/* Работает только с вебкит-браузерами (Chrome, Safari, Edge) */
+.line-clamp-1 {
+  display: -webkit-box;      /* Устаревший flexbox (для line-clamp) */
+  -webkit-line-clamp: 1;     /* Максимум 1 строка текста */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;        
+  -webkit-line-clamp: 2;    /* Максимум 2 строки текста */   
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* То же, но для 3 строк */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4; /* То же, но для 4 строк */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 @layer base {
   body {
     background-color: var(--bg-primary);

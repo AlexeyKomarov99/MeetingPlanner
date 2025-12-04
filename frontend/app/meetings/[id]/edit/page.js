@@ -144,10 +144,10 @@ export default function EditMeetingPage() {
         <h2 className='text-[var(--text-primary)]'>Редактирование встречи</h2>
         <Link
           href={`/meetings/${params.id}`}
-          className='flex items-center px-4 py-2 rounded-lg border border-[var(--border-light)] hover:bg-[var(--bg-accent)] hover:text-[var(--text-primary)] transition-colors duration-200 cursor-pointer'
+          className='flex items-center px-4 py-2 rounded-lg border border-[var(--border-light)] hover:bg-[var(--bg-accent)] hover:text-[var(--text-primary)] transition-opacity cursor-pointer bg-[var(--bg-accent)] hover:opacity-90 duration-200'
         >
-          <ArrowLeftIcon className="mr-2" />
-          <span>Назад к встрече</span>
+          <ArrowLeftIcon className="mr-2 fill-white" />
+          <span className='text-[#fff]'>Назад к встрече</span>
         </Link>
       </div>
 

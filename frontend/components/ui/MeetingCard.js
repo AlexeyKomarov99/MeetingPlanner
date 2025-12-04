@@ -7,8 +7,8 @@ import { RiMapPinLine as LocationMapIcon } from "react-icons/ri"
 
 export const MeetingCard = ({meeting}) => {
   return (
-    <article className='border border-[var(--border-light)] rounded-lg p-6'>
-      <h5 className='text-[var(--text-primary)] mb-2'>{meeting.title}</h5>
+    <article className='border border-[var(--border-light)] rounded-lg p-6 flex flex-col h-[350px]'>
+      <h5 className='text-[var(--text-primary)] mb-2 line-clamp-1'>{meeting.title}</h5>
       
       <div className='flex flex-col mb-2'>
         <div className='flex items-center space-x-1'>
@@ -26,15 +26,19 @@ export const MeetingCard = ({meeting}) => {
 
         <div className='flex items-center space-x-1'>
           <LocationMapIcon className='icon' style={{color: 'var(--text-secondary)'}} />
-          <span className='text-[var(--text-secondary)]'>{meeting.location}</span>
+          <span className='text-[var(--text-secondary)] truncate'>{meeting.location}</span>
         </div>
       </div>
 
-      <span className='leading-none'>{meeting.description}</span>
+      <div className='flex-1 overflow-hidden mb-4'>
+        <p className='text-[var(--text-secondary)] line-clamp-4 text-sm'>
+          {meeting.description}
+        </p>
+      </div>
 
       <div className='border-t border-[var(--border-light)] mb-4 mt-4'></div>
 
-      <div className='w-full flex justify-end'>
+      <div className='w-full flex justify-end mt-auto'>
         <Link href={`/meetings/${meeting.meeting_id}`} className='btn-transparent'>Подробнее</Link>
       </div>
 
