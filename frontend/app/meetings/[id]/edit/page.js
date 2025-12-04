@@ -119,7 +119,7 @@ export default function EditMeetingPage() {
   }
 
   return (
-    <div className='w-full max-w-7xl mx-auto mb-20'>
+    <div className='w-full max-w-7xl mx-auto mb-20 pt-5 pb-5'>
       {/* Внутренняя навигация по пути мероприятий */}
       <div className='flex items-center gap-2 mb-6 text-sm'>
         <Link 
@@ -144,7 +144,7 @@ export default function EditMeetingPage() {
         <h2 className='text-[var(--text-primary)]'>Редактирование встречи</h2>
         <Link
           href={`/meetings/${params.id}`}
-          className='flex items-center px-4 py-2 rounded-lg cursor-pointer border border-[var(--border-light)] hover:bg-[var(--bg-secondary)] transition-colors duration-200'
+          className='flex items-center px-4 py-2 rounded-lg border border-[var(--border-light)] hover:bg-[var(--bg-accent)] hover:text-[var(--text-primary)] transition-colors duration-200 cursor-pointer'
         >
           <ArrowLeftIcon className="mr-2" />
           <span>Назад к встрече</span>

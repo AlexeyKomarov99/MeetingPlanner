@@ -46,7 +46,7 @@ const page = () => {
             <input 
               {...register('title')}
               placeholder='Введите название встречи'
-              className='w-full px-4 py-2 border border-[var(--border-light)] rounded-lg hover:border-[var(--text-accent)!important] transition-colors duration-200 cursor-pointer focus:border-[var(--text-accent)] focus:outline-none'
+              className='w-full px-4 py-2 border border-[var(--border-light)] rounded-lg bg-[var(--bg-primary)] hover:border-[var(--text-accent)!important] transition-colors duration-200 cursor-pointer focus:border-[var(--text-accent)] focus:outline-none'
             />
             {errors.title && <span className='text-sm text-red-500'>{errors.title.message}</span>}
           </div>
@@ -58,7 +58,7 @@ const page = () => {
               {...register('description')}
               rows="4"
               placeholder='Опишите детали встречи'
-              className='w-full px-4 py-2 border border-[var(--border-light)] rounded-lg hover:border-[var(--text-accent)!important] transition-colors duration-200 cursor-pointer focus:border-[var(--text-accent)] focus:outline-none'
+              className='w-full px-4 py-2 border border-[var(--border-light)] rounded-lg bg-[var(--bg-primary)] hover:border-[var(--text-accent)!important] transition-colors duration-200 cursor-pointer focus:border-[var(--text-accent)] focus:outline-none'
             />
             {errors.description && <span className='text-sm text-red-500'>{errors.description.message}</span>}
           </div>
@@ -70,7 +70,7 @@ const page = () => {
               <input 
                 type="datetime-local"
                 {...register('start_time')}
-                className='w-full px-4 py-2 border border-[var(--border-light)] rounded-lg  hover:border-[var(--text-accent)!important] transition-colors duration-200 cursor-pointer focus:border-[var(--text-accent)] focus:outline-none'
+                className='w-full px-4 py-2 border border-[var(--border-light)] rounded-lg bg-[var(--bg-primary)]  hover:border-[var(--text-accent)!important] transition-colors duration-200 cursor-pointer focus:border-[var(--text-accent)] focus:outline-none'
               />
               {errors.start_time && <span className='text-sm text-red-500'>{errors.start_time.message}</span>}
             </div>
@@ -81,7 +81,7 @@ const page = () => {
               <input 
                 type="datetime-local"
                 {...register('end_time')}
-                className='w-full px-4 py-2 border border-[var(--border-light)] rounded-lg hover:border-[var(--text-accent)!important] transition-colors duration-200 cursor-pointer focus:border-[var(--text-accent)] focus:outline-none'
+                className='w-full px-4 py-2 border border-[var(--border-light)] rounded-lg bg-[var(--bg-primary)] hover:border-[var(--text-accent)!important] transition-colors duration-200 cursor-pointer focus:border-[var(--text-accent)] focus:outline-none'
               />
               {errors.end_time && <span className='text-sm text-red-500'>{errors.end_time.message}</span>}
             </div>
@@ -94,7 +94,7 @@ const page = () => {
               <input 
                 {...register('location')}
                 placeholder='Например: Центральный офис'
-                className='w-full px-4 py-2 border border-[var(--border-light)] rounded-lg hover:border-[var(--text-accent)!important] transition-colors duration-200 cursor-pointer focus:border-[var(--text-accent)] focus:outline-none'
+                className='w-full px-4 py-2 border border-[var(--border-light)] rounded-lg bg-[var(--bg-primary)] hover:border-[var(--text-accent)!important] transition-colors duration-200 cursor-pointer focus:border-[var(--text-accent)] focus:outline-none'
               />
               {errors.location && <span className='text-sm text-red-500'>{errors.location.message}</span>}
             </div>
@@ -104,7 +104,7 @@ const page = () => {
               <label className='block text-[var(--text-primary)] mb-2'>Тип места</label>
               <select 
                 {...register('location_type')}
-                className='w-full px-4 py-2 border border-[var(--border-light)] rounded-lg hover:border-[var(--text-accent)!important] transition-colors duration-200 cursor-pointer focus:border-[var(--text-accent)] focus:outline-none'
+                className='w-full px-4 py-2 border border-[var(--border-light)] rounded-lg bg-[var(--bg-primary)] hover:border-[var(--text-accent)!important] transition-colors duration-200 cursor-pointer focus:border-[var(--text-accent)] focus:outline-none'
               >
                 <option value="office">Офис</option>
                 <option value="cafe">Кафе</option>
@@ -121,7 +121,7 @@ const page = () => {
             <label className='block text-[var(--text-primary)] mb-2'>Статус</label>
             <select 
               {...register('status')}
-              className='w-full px-4 py-2 border border-[var(--border-light)] rounded-lg hover:border-[var(--text-accent)!important] transition-colors duration-200 cursor-pointer focus:border-[var(--text-accent)] focus:outline-none'
+              className='w-full px-4 py-2 border border-[var(--border-light)] rounded-lg bg-[var(--bg-primary)] hover:border-[var(--text-accent)!important] transition-colors duration-200 cursor-pointer focus:border-[var(--text-accent)] focus:outline-none'
             >
               <option value="planned">Запланировано</option>
               <option value="active">Активно</option>

@@ -39,10 +39,10 @@ const Header = () => {
                 <div className='flex items-center space-x-8'>
                     <Logo />
                     <div className='space-x-8 flex items-center'>
-                        <Link href='/' className='text-[var(--text-primary)] hover:text-[var(--text-accent)]'>
+                        <Link href='/' className='text-[var(--text-primary)] hover:text-[var(--text-accent)] cursor-pointer'>
                             Главная
                         </Link>
-                        <Link href='/profile' className='text-[var(--text-primary)] hover:text-[var(--text-accent)]'>
+                        <Link href='/profile' className='text-[var(--text-primary)] hover:text-[var(--text-accent)] cursor-pointer'>
                             Профиль
                         </Link>
                         {user && (

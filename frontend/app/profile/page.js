@@ -14,7 +14,7 @@ const page = () => {
   const email = user ? user.email : 'Ivanov@yandex.ru'
 
   return (
-    <div className='w-full max-w-7xl mx-auto'>
+    <div className='w-full max-w-7xl mx-auto pt-5 pb-5'>
 
       <div className='flex justify-between items-center border border-[var(--border-light)] rounded-lg p-5 mb-4'>
         {/* Левая часть */}
