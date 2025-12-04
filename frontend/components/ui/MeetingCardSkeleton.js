@@ -1,6 +1,6 @@
 function MeetingCardSkeleton() {
   return (
-    <div key={i} className="border border-[var(--border-light)] rounded-lg p-6 animate-pulse">
+    <div className="border border-[var(--border-light)] rounded-lg p-6 animate-pulse">
         {/* Заголовок */}
         <div className="h-6 bg-[var(--bg-secondary)] rounded w-3/4 mb-4"></div>
         
