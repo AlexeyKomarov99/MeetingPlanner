@@ -34,7 +34,7 @@ const Header = () => {
     };
 
     return (
-        <header className='sticky top-0 z-50 bg-[var(--bg-primary)] border-b border-[var(--border-light)]'>
+        <header className='fixed top-0 left-0 right-0 z-50 bg-[var(--bg-primary)] border-b border-[var(--border-light)]'>
             <div className='w-full max-w-7xl mx-auto py-5 flex justify-between items-center'>
                 <div className='flex items-center space-x-8'>
                     <Logo />
@@ -42,7 +42,7 @@ const Header = () => {
                         <Link href='/' className='text-[var(--text-primary)] hover:text-[var(--text-accent)] cursor-pointer'>
                             Главная
                         </Link>
-                        <Link href='/profile' className='text-[var(--text-primary)] hover:text-[var(--text-accent)] cursor-pointer'>
+                        <Link href='/profile' className='text-[var(--text-primary)] hover:text-[var(--text-accent)]'>
                             Профиль
                         </Link>
                         {user && (

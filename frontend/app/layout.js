@@ -13,7 +13,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="flex flex-col min-h-screen">
         <HeaderWrapper />
-        <main className="flex-1">
+        <main className="pt-20 pb-24">
           <div className="min-h-[calc(100vh-140px)]">
             {children}
           </div>
