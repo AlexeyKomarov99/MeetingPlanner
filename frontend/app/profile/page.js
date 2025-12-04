@@ -116,7 +116,7 @@ const Page = () => {
           href='/profile/edit' 
           className='px-6 py-2.5 rounded-lg bg-[var(--bg-accent)] text-white hover:opacity-90 transition-opacity whitespace-nowrap'
         >
-          Изменить профиль
+          Настройки
         </Link>
       </div>
 

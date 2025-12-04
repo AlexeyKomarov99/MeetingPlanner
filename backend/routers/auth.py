@@ -167,11 +167,8 @@ async def refresh_token(token_data: RefreshTokenSchema):
 
 # POST /api/auth/logout - выход пользователя
 @router.post("/logout", status_code=status.HTTP_200_OK)
-async def logout(
-    token_data: RefreshTokenSchema,
-    current_user: User = Depends(get_current_user)
-):
-    # На бэкенде просто валидируем токен и возвращаем успех
+async def logout(current_user: User = Depends(get_current_user)):
+    # Логика инвалидации токена на бэкенде (если нужна)
     return {"message": "Successfully logged out"}
 
 # Маршрут /me

@@ -90,6 +90,10 @@ const useStore = create(
                 },
                 lastUpdate: Date.now()
             })),
+            updateUser: (updatedData) => set((state) => ({
+                user: state.user ? { ...state.user, ...updatedData } : null,
+                lastUpdate: Date.now()
+            })),
         }),
         {
             name: 'meeting-planner-storage'

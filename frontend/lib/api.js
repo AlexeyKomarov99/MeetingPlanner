@@ -48,7 +48,6 @@ export const authAPI = {
   register: (userData) => api.post('/api/auth/register', userData),
   logout: () => api.post('/api/auth/logout'),
   refresh: (refreshToken) => api.post('/api/auth/refresh', { refresh: refreshToken })
-  
 }
 
 export const meetingsAPI = {
@@ -61,7 +60,7 @@ export const meetingsAPI = {
 
 export const usersAPI = {
   getProfile: () => api.get('/api/users/me'),
-  updateProfile: (userData) => api.put('/api/users/me', userData),
+  updateProfile: (userData, userId) => api.patch(`/api/users/${userId}`, userData),
 }
 
 export default api
