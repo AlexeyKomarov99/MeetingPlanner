@@ -16,7 +16,7 @@
     /* Основные цвета */
     --bg-primary: #ffffff;
     --bg-secondary: #f8fafc;
-    --bg-accent: #6366f1;
+    --bg-accent: var(--accent-indigo);
     
     /* Текст */
     --text-primary: #1e293b;
@@ -37,6 +37,7 @@
     --accent-purple: #8b5cf6;
     --accent-blue: #3b82f6;
     --accent-emerald: #10b981;
+    --bg-accent: var(--accent-indigo);
 
     --main-icon-size: 24px;
     --icon-size: 20px;
@@ -70,6 +71,44 @@
   --accent-emerald: #34d399;
 }
 
+/* === ДИНАМИЧЕСКОЕ ИЗМЕНЕНИЕ АКЦЕНТНОГО ЦВЕТА === */
+
+/* Светлая тема с разными акцентами */
+[data-theme="light"][data-accent="indigo"] {
+    --bg-accent: var(--accent-indigo);
+    --text-accent: var(--accent-indigo);
+}
+[data-theme="light"][data-accent="purple"] {
+    --bg-accent: var(--accent-purple);
+    --text-accent: var(--accent-purple);
+}
+[data-theme="light"][data-accent="blue"] {
+    --bg-accent: var(--accent-blue);
+    --text-accent: var(--accent-blue);
+}
+[data-theme="light"][data-accent="emerald"] {
+    --bg-accent: var(--accent-emerald);
+    --text-accent: var(--accent-emerald);
+}
+
+/* Тёмная тема с разными акцентами */
+[data-theme="dark"][data-accent="indigo"] {
+    --bg-accent: var(--accent-indigo);
+    --text-accent: var(--accent-indigo);
+}
+[data-theme="dark"][data-accent="purple"] {
+    --bg-accent: var(--accent-purple);
+    --text-accent: var(--accent-purple);
+}
+[data-theme="dark"][data-accent="blue"] {
+    --bg-accent: var(--accent-blue);
+    --text-accent: var(--accent-blue);
+}
+[data-theme="dark"][data-accent="emerald"] {
+    --bg-accent: var(--accent-emerald);
+    --text-accent: var(--accent-emerald);
+}
+
 .main-icon {
   width: var(--main-icon-size);
   height: var(--main-icon-size);
@@ -95,6 +134,7 @@
   transition: color 0.2s ease, background-color 0.2s ease;
   cursor: pointer;
 }
+
 .btn-transparent:hover {
   background-color: var(--bg-accent);
   color: var(--bg-primary);
@@ -108,6 +148,7 @@
   transition: color 0.2s ease, background-color 0.2s ease, filter 0.2s ease;
   cursor: pointer;
 }
+
 .btn-accent-color:hover {
   filter: brightness(1.1);
 }
@@ -184,10 +225,6 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     text-decoration: none;
     transition: color 0.2s ease;
   }
-
-  /* a:hover {
-    color: var(--accent-purple);
-  } */
 
   /* Кнопки базовые */
   button {

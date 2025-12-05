@@ -39,9 +39,10 @@ const useStore = create(
             toggleLang: () => set((state) => ({
                 lang: state.lang === 'ru' ? 'en' : 'ru'
             })),
-            toggleAccentColor: () => set((state) => ({
-                accentColor: state.accentColor === 'indigo' ? 'purple' : 'indigo'
-            })),
+            setAccentColor: (color) => set({ 
+                accentColor: color,
+                lastUpdate: Date.now() 
+            }),
             setUser: (userData) => set({user: userData}),
             clearUser: () => set({user: null}),
             removeMeeting: (meetingId) => set((state) => ({

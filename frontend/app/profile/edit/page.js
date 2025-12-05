@@ -5,6 +5,7 @@ import { usersAPI } from '../../../lib/api'
 //===== icons =====//
 import { FiUser, FiLock, FiSettings, FiGlobe, FiSun, FiMoon } from 'react-icons/fi'
 import { MdPhotoCamera } from 'react-icons/md'
+import { FaCheck as CheckIcon } from "react-icons/fa6";
 
 export default function SettingsPage() {
   const { user, theme, lang, accentColor, updateUser, toggleTheme, toggleLang, setAccentColor } = useStore()
@@ -304,8 +305,8 @@ export default function SettingsPage() {
                       onClick={toggleTheme}
                       className={`flex items-center space-x-2 px-4 py-3 rounded-lg border ${
                         theme === 'light' 
-                          ? 'border-[var(--bg-accent)] bg-[var(--bg-accent)] bg-opacity-10 text-[var(--bg-accent)]' 
-                          : 'border-[var(--border-light)] text-[var(--text-primary)] hover:bg-[var(--bg-hover)]'
+                          ? 'border-[var(--text-primary)] bg-[var(--bg-accent)]/10 text-[var(--text-primary)]' 
+                          : 'border-[var(--text-primary)] text-[var(--text-primary)] hover:bg-[var(--bg-hover)]'
                       }`}
                     >
                       {theme === 'light' ? <FiSun /> : <FiMoon />}
@@ -325,8 +326,8 @@ export default function SettingsPage() {
                       onClick={toggleLang}
                       className={`flex items-center space-x-2 px-4 py-3 rounded-lg border ${
                         lang === 'ru' 
-                          ? 'border-[var(--bg-accent)] bg-[var(--bg-accent)] bg-opacity-10 text-[var(--bg-accent)]' 
-                          : 'border-[var(--border-light)] text-[var(--text-primary)] hover:bg-[var(--bg-hover)]'
+                          ? 'border-[var(--text-primary)] bg-[var(--bg-accent)]/10 text-[var(--text-primary)]' 
+                          : 'border-[var(--text-primary)] text-[var(--text-primary)] hover:bg-[var(--bg-hover)]'
                       }`}
                     >
                       <span>{lang === 'ru' ? 'Русский' : 'English'}</span>
@@ -347,13 +348,19 @@ export default function SettingsPage() {
                       <button
                         key={item.value}
                         onClick={() => setAccentColor(item.value)}
-                        className={`flex flex-col items-center ${accentColor === item.value ? 'ring-2 ring-offset-2 ring-[var(--bg-accent)]' : ''}`}
+                        className="flex flex-col items-center"
                         title={item.label}
                       >
-                        <div 
-                          className="w-12 h-12 rounded-full mb-2"
-                          style={{ backgroundColor: item.color }}
-                        />
+                        <div className="relative">
+                          <div 
+                            className="w-12 h-12 rounded-full mb-2 flex items-center justify-center"
+                            style={{ backgroundColor: item.color }}
+                          >
+                            {accentColor === item.value && (
+                              <CheckIcon className="w-6 h-6 text-white" />
+                            )}
+                          </div>
+                        </div>
                         <span className="text-sm text-[var(--text-secondary)]">{item.label}</span>
                       </button>
                     ))}
