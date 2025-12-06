@@ -12,6 +12,7 @@ import { MeetingCard } from '../components/ui/MeetingCard'
 import useStore from '../lib/store'
 import { GoPlus as PlusIcon } from "react-icons/go"
 import MeetingCardSkeleton from '../components/ui/MeetingCardSkeleton'
+import useTranslations from '../lib/useTranslations'
 
 export default function Home() {
   const [filter, setFilter] = useState('all')
@@ -19,6 +20,7 @@ export default function Home() {
   const { user, lastUpdate, accessToken } = useStore()
   const [visibleCount, setVisibleCount] = useState(10)
   const [hasChecked, setHasChecked] = useState(false)
+  const t = useTranslations()
   
   // Редирект, если пользователь не авторизован
   useEffect(() => {
@@ -33,12 +35,12 @@ export default function Home() {
 
   // Статусы с сервера
   const statuses = [
-    { value: 'all', label: 'Все', color: 'bg-gray-500' },
-    { value: 'planned', label: 'Запланированные', color: 'bg-yellow-500' },
-    { value: 'active', label: 'Активные', color: 'bg-blue-400' },
-    { value: 'completed', label: 'Завершенные', color: 'bg-green-400' },
-    { value: 'cancelled', label: 'Отмененные', color: 'bg-red-400' },
-    { value: 'postponed', label: 'Перенесенные', color: 'bg-orange-400' }
+    { value: 'all', label: t('meetings.all'), color: 'bg-gray-500' },
+    { value: 'planned', label: t('meetings.planned'), color: 'bg-yellow-500' },
+    { value: 'active', label: t('meetings.active'), color: 'bg-blue-400' },
+    { value: 'completed', label: t('meetings.completed'), color: 'bg-green-400' },
+    { value: 'cancelled', label: t('meetings.cancelled'), color: 'bg-red-400' },
+    { value: 'postponed', label: t('meetings.postponed'), color: 'bg-orange-400' }
   ]
 
   // Объединяем встречи пользователя
@@ -98,7 +100,7 @@ export default function Home() {
 
   return (
     <div className='w-full max-w-7xl mx-auto pt-5 pb-5'>
-      <h2 className='mb-5'>Мои встречи</h2>
+      <h2 className='mb-5'>{t('meetings.myMeetings')}</h2>
 
       {/* Кнопки фильтров */}
       <div className='flex items-center justify-between mb-5'>
@@ -123,19 +125,19 @@ export default function Home() {
           className='flex items-center px-4 py-2 rounded-lg cursor-pointer bg-[var(--bg-accent)] space-x-1 hover:opacity-90 transition-opacity duration-200'
         >
           <PlusIcon className='text-[#fff]' />
-          <span className='text-[#fff]'>Создать мероприятие</span>
+          <span className='text-[#fff]'>{t('meetings.createMeeting')}</span>
         </Link>
       </div>
 
       {/* Информация о фильтре */}
       <div className="mb-5 text-sm text-[var(--text-secondary)]">
-        {filter === 'all' && 'Показаны все встречи'}
-        {filter === 'planned' && 'Показаны встречи со статусом "Запланированные"'}
-        {filter === 'active' && 'Показаны встречи со статусом "Активные"'}
-        {filter === 'completed' && 'Показаны встречи со статусом "Завершенные"'}
-        {filter === 'cancelled' && 'Показаны встречи со статусом "Отмененные"'}
-        {filter === 'postponed' && 'Показаны встречи со статусом "Перенесенные"'}
-        <span className="ml-2">({visibleMeetings.length} из {meetingsFormatted.length})</span>
+        {filter === 'all' && t('meetings.showingAll')}
+        {filter === 'planned' && t('meetings.showingPlanned')}
+        {filter === 'active' && t('meetings.showingActive')}
+        {filter === 'completed' && t('meetings.showingCompleted')}
+        {filter === 'cancelled' && t('meetings.showingCancelled')}
+        {filter === 'postponed' && t('meetings.showingPostponed')}
+        <span className="ml-2">({t('meetings.showingCount', { visible: visibleMeetings.length, total: meetingsFormatted.length })})</span> {/* ← ПЕРЕВОД */}
       </div>
 
       {/* Список встреч */}
@@ -143,7 +145,7 @@ export default function Home() {
         {!user ? (
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--border-light)]"></div>
-            <p className="mt-4 text-[var(--text-primary)]">Загрузка данных...</p>
+            <p className="mt-4 text-[var(--text-primary)]">{t('meetings.loadingData')}</p> 
           </div>
         ) : isLoading ? (
           // Skeleton
@@ -156,11 +158,14 @@ export default function Home() {
           <div className="text-center py-12 rounded-2xl shadow-sm border">
             <div className="text-6xl mb-4">📅</div>
             <h3 className="text-2xl font-semibold text-[var(--text-primary)] mb-2">
-              {filter === 'all' ? 'Пока нет встреч' : 
-                `Нет встреч со статусом "${statuses.find(s => s.value === filter)?.label}"`}
+              {filter === 'all' 
+                ? t('meetings.noMeetings') 
+                : t('meetings.noMeetingsWithStatus', { status: statuses.find(s => s.value === filter)?.label })}
             </h3>
             <p className="text-[var(--text-primary)] max-w-md mx-auto">
-              {filter === 'all' ? 'Создайте первую встречу' : 'Попробуйте изменить фильтр'}
+              {filter === 'all' 
+                ? t('meetings.createFirstMeeting') 
+                : t('meetings.tryChangeFilter')}
             </p>
           </div>
         ) : (
@@ -181,7 +186,7 @@ export default function Home() {
                   onClick={loadMore}
                   className="px-6 py-3 rounded-lg bg-[var(--bg-accent)] text-white hover:opacity-90 transition-opacity duration-200"
                 >
-                  Показать еще ({meetingsFormatted.length - visibleCount})
+                  {t('meetings.showMore', { count: meetingsFormatted.length - visibleCount })}
                 </button>
               </div>
             )}

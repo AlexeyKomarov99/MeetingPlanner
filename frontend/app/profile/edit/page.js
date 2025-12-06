@@ -1,14 +1,16 @@
 'use client'
 import { useState, useEffect } from 'react'
 import useStore from '../../../lib/store'
+import useTranslations from '../../../lib/useTranslations'
 import { usersAPI } from '../../../lib/api'
 //===== icons =====//
 import { FiUser, FiLock, FiSettings, FiGlobe, FiSun, FiMoon } from 'react-icons/fi'
 import { MdPhotoCamera } from 'react-icons/md'
-import { FaCheck as CheckIcon } from "react-icons/fa6";
+import { FaCheck as CheckIcon } from "react-icons/fa6"
 
 export default function SettingsPage() {
-  const { user, theme, lang, accentColor, updateUser, toggleTheme, toggleLang, setAccentColor } = useStore()
+  const { user, theme, lang, accentColor, updateUser, toggleTheme, setLang, setAccentColor } = useStore()
+  const t = useTranslations()
   const [activeTab, setActiveTab] = useState('profile')
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -29,9 +31,9 @@ export default function SettingsPage() {
   })
 
   const tabs = [
-    { id: 'profile', label: 'Профиль', icon: <FiUser /> },
-    { id: 'password', label: 'Пароль', icon: <FiLock /> },
-    { id: 'appearance', label: 'Внешний вид', icon: <FiSettings /> },
+    { id: 'profile', label: t('settings.profile'), icon: <FiUser /> },
+    { id: 'password', label: t('settings.password'), icon: <FiLock /> },
+    { id: 'appearance', label: t('settings.appearance'), icon: <FiSettings /> },
   ]
 
   // Загружаем данные пользователя
@@ -56,21 +58,15 @@ export default function SettingsPage() {
         name: profileForm.name,
         surname: profileForm.surname,
         user_photo: profileForm.user_photo
-        // НЕ включаем email
       }
       
       const response = await usersAPI.updateProfile(dataToSend, user.user_id)
       
       updateUser(response.data)
-      alert('Профиль успешно обновлен!')
+      alert(t('settings.profileUpdated')) 
     } catch (error) {
-      console.error('Полная ошибка обновления профиля:', error)
-      console.error('Детали ошибки:', {
-        message: error.message,
-        response: error.response?.data,
-        status: error.response?.status
-      })
-      alert('Не удалось обновить профиль')
+      console.error(t('settings.profileUpdateError'), error)
+      alert(t('settings.profileUpdateFailed')) 
     } finally {
       setSaving(false)
     }
@@ -80,7 +76,7 @@ export default function SettingsPage() {
     e.preventDefault()
     
     if (passwordForm.new_password !== passwordForm.confirm_password) {
-      alert('Новые пароли не совпадают!')
+      alert(t('settings.passwordsMismatch')) 
       return
     }
     
@@ -95,11 +91,11 @@ export default function SettingsPage() {
         user.user_id
       )
       
-      alert('Пароль успешно изменен!')
+      alert(t('settings.passwordUpdated')) 
       setPasswordForm({ current_password: '', new_password: '', confirm_password: '' })
     } catch (error) {
-      console.error('Ошибка смены пароля:', error)
-      alert('Не удалось сменить пароль')
+      console.error(t('settings.passwordChangeError'), error)
+      alert(t('settings.passwordChangeFailed')) 
     } finally {
       setSaving(false)
     }
@@ -109,14 +105,14 @@ export default function SettingsPage() {
     return (
       <div className='w-full max-w-7xl mx-auto text-center py-12'>
         <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--border-light)]"></div>
-        <p className="mt-4 text-[var(--text-primary)]">Загрузка...</p>
+        <p className="mt-4 text-[var(--text-primary)]">{t('app.loading')}</p>
       </div>
     )
   }
 
   return (
     <div className='w-full max-w-7xl mx-auto pt-5 pb-5'>
-      <h2 className='mb-6'>Настройки</h2>
+      <h2 className='mb-6'>{t('settings.title')}</h2> 
       
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Боковое меню */}
@@ -146,7 +142,7 @@ export default function SettingsPage() {
             <div className="bg-[var(--bg-secondary)] rounded-xl p-6">
               <h3 className="flex items-center space-x-2 mb-6">
                 <FiUser />
-                <span>Персональная информация</span>
+                <span>{t('settings.personalInfo')}</span> 
               </h3>
               
               <form onSubmit={handleProfileSubmit} className="space-y-6">
@@ -157,7 +153,7 @@ export default function SettingsPage() {
                       {profileForm.user_photo ? (
                         <img 
                           src={profileForm.user_photo} 
-                          alt="Avatar" 
+                          alt={t('settings.avatarAlt')} 
                           className="w-full h-full object-cover"
                         />
                       ) : (
@@ -169,6 +165,7 @@ export default function SettingsPage() {
                     <button 
                       type="button"
                       className="absolute bottom-0 right-0 bg-[var(--bg-accent)] text-white p-2 rounded-full hover:opacity-90"
+                      title={t('settings.changePhoto')}
                     >
                       <MdPhotoCamera size={20} />
                     </button>
@@ -178,7 +175,9 @@ export default function SettingsPage() {
                   <div className="flex-1 space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">Имя</label>
+                        <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                          {t('settings.firstName')}
+                        </label>
                         <input
                           type="text"
                           name="name"
@@ -189,7 +188,9 @@ export default function SettingsPage() {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">Фамилия</label>
+                        <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                          {t('settings.lastName')}
+                        </label>
                         <input
                           type="text"
                           name="surname"
@@ -202,7 +203,9 @@ export default function SettingsPage() {
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">Email</label>
+                      <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                        {t('settings.email')}
+                      </label>
                       <input
                         type="email"
                         name="email"
@@ -221,7 +224,7 @@ export default function SettingsPage() {
                   disabled={saving}
                   className="px-6 py-3 rounded-lg bg-[var(--bg-accent)] text-white hover:opacity-90 transition-opacity duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {saving ? 'Сохранение...' : 'Сохранить изменения'}
+                  {saving ? t('settings.saving') : t('settings.saveChanges')}
                 </button>
               </form>
             </div>
@@ -232,12 +235,14 @@ export default function SettingsPage() {
             <div className="bg-[var(--bg-secondary)] rounded-xl p-6">
               <h3 className="flex items-center space-x-2 mb-6">
                 <FiLock />
-                <span>Настройки пароля</span>
+                <span>{t('settings.passwordSettings')}</span>
               </h3>
               
               <form onSubmit={handlePasswordSubmit} className="space-y-4 max-w-lg">
                 <div>
-                  <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">Текущий пароль</label>
+                  <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                    {t('settings.currentPassword')}
+                  </label>
                   <input
                     type="password"
                     name="current_password"
@@ -249,7 +254,9 @@ export default function SettingsPage() {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">Новый пароль</label>
+                  <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                    {t('settings.newPassword')}
+                  </label>
                   <input
                     type="password"
                     name="new_password"
@@ -262,7 +269,9 @@ export default function SettingsPage() {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">Подтвердите новый пароль</label>
+                  <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                    {t('settings.confirmPassword')}
+                  </label>
                   <input
                     type="password"
                     name="confirm_password"
@@ -279,7 +288,7 @@ export default function SettingsPage() {
                   disabled={saving}
                   className="px-6 py-3 rounded-lg bg-[var(--bg-accent)] text-white hover:opacity-90 transition-opacity duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {saving ? 'Смена пароля...' : 'Сменить пароль'}
+                  {saving ? t('settings.changingPassword') : t('settings.changePassword')}
                 </button>
               </form>
             </div>
@@ -290,7 +299,7 @@ export default function SettingsPage() {
             <div className="bg-[var(--bg-secondary)] rounded-xl p-6">
               <h3 className="flex items-center space-x-2 mb-6">
                 <FiSettings />
-                <span>Внешний вид приложения</span>
+                <span>{t('settings.appearanceTitle')}</span>
               </h3>
               
               <div className="space-y-8">
@@ -298,7 +307,7 @@ export default function SettingsPage() {
                 <div>
                   <h4 className="flex items-center space-x-2 mb-4 text-[var(--text-primary)]">
                     {theme === 'light' ? <FiSun /> : <FiMoon />}
-                    <span>Тема</span>
+                    <span>{t('settings.theme')}</span>
                   </h4>
                   <div className="flex space-x-4">
                     <button
@@ -310,7 +319,7 @@ export default function SettingsPage() {
                       }`}
                     >
                       {theme === 'light' ? <FiSun /> : <FiMoon />}
-                      <span>{theme === 'light' ? 'Светлая' : 'Тёмная'}</span>
+                      <span>{theme === 'light' ? t('settings.light') : t('settings.dark')}</span>
                     </button>
                   </div>
                 </div>
@@ -319,31 +328,46 @@ export default function SettingsPage() {
                 <div>
                   <h4 className="flex items-center space-x-2 mb-4 text-[var(--text-primary)]">
                     <FiGlobe />
-                    <span>Язык</span>
+                    <span>{t('settings.language')}</span>
                   </h4>
                   <div className="flex space-x-4">
+                    {/* Кнопка для русского */}
                     <button
-                      onClick={toggleLang}
-                      className={`flex items-center space-x-2 px-4 py-3 rounded-lg border ${
+                      onClick={() => setLang('ru')}
+                      className={`flex items-center space-x-2 px-4 py-3 rounded-lg border transition-colors ${
                         lang === 'ru' 
-                          ? 'border-[var(--text-primary)] bg-[var(--bg-accent)]/10 text-[var(--text-primary)]' 
-                          : 'border-[var(--text-primary)] text-[var(--text-primary)] hover:bg-[var(--bg-hover)]'
+                          ? 'border-[var(--bg-accent)] bg-[var(--bg-accent)] text-white'
+                          : 'border-[var(--border-light)] text-[var(--text-primary)] hover:bg-[var(--bg-hover)]'
                       }`}
                     >
-                      <span>{lang === 'ru' ? 'Русский' : 'English'}</span>
+                      <span>{t('settings.russian')}</span>
+                    </button>
+                    
+                    {/* Кнопка для английского */}
+                    <button
+                      onClick={() => setLang('en')}
+                      className={`flex items-center space-x-2 px-4 py-3 rounded-lg border transition-colors ${
+                        lang === 'en' 
+                          ? 'border-[var(--bg-accent)] bg-[var(--bg-accent)] text-white'
+                          : 'border-[var(--border-light)] text-[var(--text-primary)] hover:bg-[var(--bg-hover)]'
+                      }`}
+                    >
+                      <span>{t('settings.english')}</span>
                     </button>
                   </div>
                 </div>
                 
                 {/* Акцентный цвет */}
                 <div>
-                  <h4 className="mb-4 text-[var(--text-primary)]">Акцентный цвет</h4>
+                  <h4 className="mb-4 text-[var(--text-primary)]">
+                    {t('settings.accentColor')}
+                  </h4>
                   <div className="flex space-x-4">
                     {[
-                      { value: 'indigo', color: '#6366F1', label: 'Индиго' },
-                      { value: 'purple', color: '#8B5CF6', label: 'Пурпурный' },
-                      { value: 'blue', color: '#3B82F6', label: 'Синий' },
-                      { value: 'emerald', color: '#10B981', label: 'Изумрудный' }
+                      { value: 'indigo', color: '#6366F1', label: t('settings.indigo') },
+                      { value: 'purple', color: '#8B5CF6', label: t('settings.purple') },
+                      { value: 'blue', color: '#3B82F6', label: t('settings.blue') },
+                      { value: 'emerald', color: '#10B981', label: t('settings.emerald') }
                     ].map((item) => (
                       <button
                         key={item.value}

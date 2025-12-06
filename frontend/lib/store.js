@@ -13,6 +13,7 @@ const useStore = create(
             accentColor: 'indigo',
             lastUpdate: Date.now(),
 
+            // auth
             login: (userData, tokens) => set({
                 user: userData,
                 accessToken: tokens.access,
@@ -32,19 +33,26 @@ const useStore = create(
                 refreshToken: tokens.refresh,
                 lastUpdate: Date.now() 
             }),
-            
+            // settings
             toggleTheme: () => set((state) => ({
                 theme: state.theme === 'light' ? 'dark' : 'light'
             })),
-            toggleLang: () => set((state) => ({
-                lang: state.lang === 'ru' ? 'en' : 'ru'
-            })),
+            setLang: (language) => set({ 
+                lang: language,
+                lastUpdate: Date.now() 
+            }),
             setAccentColor: (color) => set({ 
                 accentColor: color,
                 lastUpdate: Date.now() 
             }),
+            // users
             setUser: (userData) => set({user: userData}),
             clearUser: () => set({user: null}),
+            updateUser: (updatedData) => set((state) => ({
+                user: state.user ? { ...state.user, ...updatedData } : null,
+                lastUpdate: Date.now()
+            })),
+            // meetings
             removeMeeting: (meetingId) => set((state) => ({
                 user: {
                     ...state.user,
@@ -89,10 +97,6 @@ const useStore = create(
                             : meeting
                     )
                 },
-                lastUpdate: Date.now()
-            })),
-            updateUser: (updatedData) => set((state) => ({
-                user: state.user ? { ...state.user, ...updatedData } : null,
                 lastUpdate: Date.now()
             })),
         }),
