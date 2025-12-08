@@ -9,9 +9,10 @@ from database.database import get_db
 from models.user import User
 from models.meeting import Meeting
 from models.participant import Participant
-from schemas.auth import LoginSchema, LoginResponse, RefreshTokenSchema, RefreshResponse, UserWithMeetings
+from schemas.auth import LoginSchema, LoginResponse, RefreshTokenSchema, RefreshResponse, UserWithMeetings, ResetPasswordSchema, ForgotPasswordSchema
 from core.security import create_tokens, verify_refresh_token, create_access_token, verify_token
 from schemas.user import UserCreate
+from core.token_store import generate_reset_token, store_reset_token, get_reset_token, delete_reset_token
 
 router = APIRouter()
 security = HTTPBearer()
@@ -184,4 +185,85 @@ async def get_me(current_user: User = Depends(get_current_user), db: AsyncSessio
         "user_photo": current_user.user_photo,
         "created_meetings": user_data["created_meetings"] if user_data else [],
         "participating_meetings": user_data["participating_meetings"] if user_data else []
+    }
+
+# POST /api/auth/forgot-password - забыл пароль
+@router.post("/forgot-password")
+async def forgot_password(
+    data: ForgotPasswordSchema,
+    db: AsyncSession = Depends(get_db)
+):
+    # Проверяем существование пользователя
+    result = await db.execute(select(User).where(User.email == data.email))
+    user = result.scalar_one_or_none()
+    
+    if user:
+        # Генерируем токен
+        reset_token = generate_reset_token()
+        
+        # Сохраняем токен
+        store_reset_token(str(user.user_id), reset_token)
+        
+        # Генерируем ссылку (в разработке выводим в консоль)
+        reset_link = f"http://localhost:3000/auth/reset-password/{reset_token}"
+        print(f"🔐 Reset password link for {data.email}: {reset_link}")
+        
+        # TODO: В продакшене отправляем email
+    
+    # Всегда возвращаем успех (security through obscurity)
+    return {
+        "message": "Если пользователь существует, ссылка для сброса пароля отправлена на email"
+    }
+
+# POST /api/auth/reset-password - восстановление пароля
+@router.post("/reset-password")
+async def reset_password(
+    data: ResetPasswordSchema,
+    db: AsyncSession = Depends(get_db)
+):
+    # Валидация паролей
+    if data.new_password != data.confirm_password:
+        raise HTTPException(
+            status_code=400,
+            detail="Пароли не совпадают"
+        )
+    
+    if len(data.new_password) < 6:
+        raise HTTPException(
+            status_code=400,
+            detail="Пароль должен быть не менее 6 символов"
+        )
+    
+    # Получаем user_id по токену
+    user_id = get_reset_token(data.token)
+    
+    if not user_id:
+        raise HTTPException(
+            status_code=400,
+            detail="Недействительная или просроченная ссылка"
+        )
+    
+    # Находим пользователя
+    result = await db.execute(select(User).where(User.user_id == user_id))
+    user = result.scalar_one_or_none()
+    
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="Пользователь не найден"
+        )
+    
+    # Обновляем пароль
+    user.hashed_password = bcrypt.hashpw(
+        data.new_password.encode(),
+        bcrypt.gensalt()
+    ).decode()
+    
+    # Удаляем использованный токен
+    delete_reset_token(data.token)
+    
+    await db.commit()
+    
+    return {
+        "message": "Пароль успешно изменен"
     }

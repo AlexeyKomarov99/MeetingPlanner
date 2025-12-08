@@ -148,3 +148,42 @@ async def delete_user(user_id: UUID, db: AsyncSession = Depends(get_db)):
         "message": f"Пользователь с ID {user_id} успешно удален",
         "deleted_user_id": deleted_id
     }
+
+# routers/users.py - ДОБАВИТЬ
+@router.get("/search")
+async def search_users(
+    q: str = Query(..., min_length=2, description="Поисковый запрос (2+ символа)"),
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Поиск пользователей по имени, фамилии или email"""
+    
+    if len(q) < 2:
+        return []
+    
+    # Ищем пользователей (исключая текущего)
+    query = select(User).where(
+        and_(
+            User.user_id != current_user.user_id,
+            or_(
+                User.name.ilike(f"%{q}%"),
+                User.surname.ilike(f"%{q}%"),
+                User.email.ilike(f"%{q}%")
+            )
+        )
+    ).limit(10)
+    
+    result = await db.execute(query)
+    users = result.scalars().all()
+    
+    return [
+        {
+            "user_id": user.user_id,
+            "name": user.name,
+            "surname": user.surname,
+            "email": user.email,
+            "full_name": f"{user.name} {user.surname}",
+            "user_photo": user.user_photo
+        }
+        for user in users
+    ]

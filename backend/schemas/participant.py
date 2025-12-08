@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from datetime import datetime
+from uuid import UUID
 
 class ParticipantBase(BaseModel):
     status: str
@@ -7,9 +8,14 @@ class ParticipantBase(BaseModel):
 class ParticipantUpdate(BaseModel):
     status: str
 
-class ParticipantResponse(ParticipantBase):
-    user_id: int
-    meeting_id: int
+class ParticipantAddSchema(BaseModel):
+    user_id: UUID
+
+class ParticipantResponse(BaseModel):
+    user_id: UUID
+    meeting_id: UUID
+    status: str
+    user: dict
     
     class Config:
         from_attributes = True

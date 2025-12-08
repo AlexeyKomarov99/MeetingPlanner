@@ -30,3 +30,11 @@ class LoginResponse(BaseModel):
 
 class RefreshResponse(BaseModel):
     access: str
+
+class ForgotPasswordSchema(BaseModel):
+    email: EmailStr
+
+class ResetPasswordSchema(BaseModel):
+    token: str
+    new_password: str
+    confirm_password: str
