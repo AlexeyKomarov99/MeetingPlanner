@@ -1,9 +1,9 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 export const loginSchema = z.object({
   email: z.string().email('Некорректный email'),
   password: z.string().min(6, 'Пароль должен быть не менее 6 символов')
-});
+})
 
 export const registerSchema = z.object({
   email: z.string().email('Некорректный email'),
@@ -14,7 +14,7 @@ export const registerSchema = z.object({
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Пароли не совпадают",
   path: ["confirmPassword"]
-});
+})
 
 export const meetingSchema = z.object({
   title: z.string().min(3, 'Название должно быть не менее 3 символов').max(200),
@@ -31,4 +31,16 @@ export const meetingSchema = z.object({
 }).refine(data => new Date(data.end_time) > new Date(data.start_time), {
   message: "Время окончания должно быть позже времени начала",
   path: ["end_time"]
-});
+})
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email('Некорректный email')
+})
+
+export const resetPasswordSchema = z.object({
+  new_password: z.string().min(6, 'Пароль должен быть не менее 6 символов'),
+  confirm_password: z.string()
+}).refine((data) => data.new_password === data.confirm_password, {
+  message: "Пароли не совпадают",
+  path: ["confirm_password"]
+})

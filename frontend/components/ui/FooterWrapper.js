@@ -5,7 +5,8 @@ import Footer from './Footer'
 
 function FooterWrapper() {
     const pathname = usePathname()
-    if (['/auth/login', '/auth/register', '/auth/forgot-password'].includes(pathname)) {
+    if (pathname.startsWith('/auth/reset-password/') || 
+        ['/auth/login', '/auth/register', '/auth/forgot-password'].includes(pathname)) {
         return null
     }
     return <Footer />
