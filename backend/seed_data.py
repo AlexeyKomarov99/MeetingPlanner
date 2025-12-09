@@ -35,6 +35,7 @@ async def create_sample_data():
     async with AsyncSessionLocal() as db:
         try:
             # Очищаем существующие данные
+            await db.execute(Participant.__table__.delete())  
             await db.execute(Meeting.__table__.delete())
             await db.execute(User.__table__.delete())
             await db.commit()
