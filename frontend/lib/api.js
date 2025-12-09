@@ -57,12 +57,18 @@ export const meetingsAPI = {
   createMeeting: (meetingData) => api.post('/api/meetings/', meetingData),
   getMeeting: (id) => api.get(`/api/meetings/${id}`),
   updateMeeting: (id, meetingData) => api.put(`/api/meetings/${id}`, meetingData),
-  deleteMeeting: (id) => api.delete(`/api/meetings/${id}`)
+  deleteMeeting: (id) => api.delete(`/api/meetings/${id}`),
+  getParticipants: (meetingId) => api.get(`/api/meetings/${meetingId}/participants`),
+  addParticipant: (meetingId, data) => api.post(`/api/meetings/${meetingId}/participants`, data),
+  removeParticipant: (meetingId, userId) => api.delete(`/api/meetings/${meetingId}/participants/${userId}`),
 }
 
 export const usersAPI = {
   getProfile: () => api.get('/api/users/me'),
   updateProfile: (userData, userId) => api.patch(`/api/users/${userId}`, userData),
+  searchUsers: (query) => api.get(`/api/users/search`, { 
+    params: { q: query }
+  }),
 }
 
 export default api

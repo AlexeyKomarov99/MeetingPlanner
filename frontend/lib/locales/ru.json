@@ -154,6 +154,26 @@
     "addressPlaceholder": "Например: ул. Ленина, 15 или Zoom-ссылка",
     "statusSection": "Статус встречи",
     "saving": "Сохранение...",
-    "saveChanges": "Сохранить изменения"
+    "saveChanges": "Сохранить изменения",
+    "groupMeetings": "Групповые мероприятия"
+  },
+  "participants": {
+    "title": "Участники",
+    "addParticipant": "Добавить участника",
+    "searchPlaceholder": "Начните вводить имя или email...",
+    "noResults": "Пользователи не найдены",
+    "statusPending": "Ожидает",
+    "statusAccepted": "Принял",
+    "statusDeclined": "Отклонил",
+    "count": "{{count}} участников",
+    "remove": "Удалить",
+    "addedSuccess": "Участник добавлен",
+    "addAnother": "Добавить еще",
+    "noParticipants": "Пока нет участников",
+    "onlyCreatorCanAdd": "Только создатель встречи может добавлять участников"
+  },
+  "userSearch": {
+    "loading": "Поиск...",
+    "selectUser": "Выберите пользователя"
   }
 }

@@ -16,20 +16,42 @@ import getMonthName from '../../../utils/monthFormat'
 import getYearNumber from '../../../utils/yearFormat'
 //===== components =====//
 import { MdKeyboardArrowLeft as ArrowLeftIcon } from "react-icons/md"
+import ParticipantManager from '../../../components/ui/ParticipantManager'
 
 const MeetingDetailPage = () => {
   const params = useParams()
   const router = useRouter();
   const { removeMeeting } = useStore();
-  const [meeting, setMeeting] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [meeting, setMeeting] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [participants, setParticipants] = useState([])
+  const [participantsLoading, setParticipantsLoading] = useState(false)
   const t = useTranslations()
 
+  // Проверка, что пользователь является создателем
+  const { user } = useStore()
+  const isCreator = user?.user_id === meeting?.creator_id
+
   useEffect(() => {
-    loadMeeting()
+    if (params.id) {
+      loadMeeting()
+      loadParticipants()
+    }
   }, [params.id])
+
+  const loadParticipants = async () => {
+    try {
+      setParticipantsLoading(true)
+      const response = await meetingsAPI.getParticipants(params.id)
+      setParticipants(response.data)
+    } catch (error) {
+      console.error('Ошибка загрузки участников:', error)
+    } finally {
+      setParticipantsLoading(false)
+    }
+  }
 
   const loadMeeting = async () => {
     try {
@@ -171,6 +193,22 @@ const MeetingDetailPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Секция участников (только если есть участники) */}
+      {(participants.length > 0 || isCreator) && (
+        <div className='border border-[var(--border-light)] rounded-lg p-5 mb-4'>
+          <h5 className='text-[var(--text-primary)] mb-4'>
+            {t('participants.title')}
+          </h5>
+          
+          <ParticipantManager 
+            meetingId={params.id}
+            participants={participants}
+            isCreator={isCreator}
+            onParticipantsUpdate={loadParticipants}
+          />
+        </div>
+      )}
 
       {/* Модальное окно подтверждения */}
       {isDeleteModalOpen && (

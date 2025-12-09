@@ -41,6 +41,9 @@ const Header = () => {
                         <Link href='/' className='text-[var(--text-primary)] hover:text-[var(--text-accent)] cursor-pointer'>
                             {t('header.home')} 
                         </Link>
+                        <Link href='/profile' className='text-[var(--text-primary)] hover:text-[var(--text-accent)] cursor-pointer'>
+                            {t('settings.profile')}
+                        </Link>
                         <Link href='/profile/edit' className='text-[var(--text-primary)] hover:text-[var(--text-accent)]'>
                             {t('header.settings')} 
                         </Link>

@@ -1,12 +1,12 @@
-# seed_data.py
 import asyncio
 from database.database import AsyncSessionLocal
 from models.user import User
 from models.meeting import Meeting, MeetingStatus
 from datetime import datetime, timedelta
 import bcrypt
-import random
 from faker import Faker
+from models.participant import Participant, ParticipantStatus
+import random
 
 fake = Faker('ru_RU')  # Русские данные
 
@@ -46,7 +46,12 @@ async def create_sample_data():
                 ("Екатерина", "Смирнова"), 
                 ("Дмитрий", "Кузнецов"),
                 ("Ольга", "Попова"),
-                ("Михаил", "Васильев")
+                ("Михаил", "Васильев"),
+                ("Анна", "Соколова"),       
+                ("Сергей", "Михайлов"),     
+                ("Наталья", "Новикова"),      
+                ("Андрей", "Федоров"),
+                ("Мария", "Морозова") 
             ]
             
             for i, (name, surname) in enumerate(real_names, 1):
@@ -146,6 +151,29 @@ async def create_sample_data():
                     db.add(meeting)
             
             await db.commit()
+
+            # Берем 20 случайных встреч и делаем их групповыми
+            group_meetings = random.sample(meetings, min(20, len(meetings)))
+
+            for meeting in group_meetings:
+                # Выбираем 2-5 случайных участников (кроме создателя)
+                all_users_except_creator = [u for u in users if u.user_id != meeting.creator_id]
+                num_participants = random.randint(2, 5)
+                selected_users = random.sample(all_users_except_creator, 
+                                            min(num_participants, len(all_users_except_creator)))
+                
+                for user in selected_users:
+                    participant = Participant(
+                        meeting_id=meeting.meeting_id,
+                        user_id=user.user_id,
+                        status=random.choice([ParticipantStatus.PENDING, 
+                                            ParticipantStatus.ACCEPTED, 
+                                            ParticipantStatus.DECLINED])
+                    )
+                    db.add(participant)
+
+            await db.commit()
+
                 
         except Exception as e:
             print(f"❌ Ошибка: {e}")

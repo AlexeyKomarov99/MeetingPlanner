@@ -2,7 +2,7 @@ import asyncio
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database.database import engine, Base
-from routers import users, meetings, auth
+from routers import users, meetings, auth, participants
 
 app = FastAPI(title="Meeting Planner API")
 
@@ -19,6 +19,7 @@ app.add_middleware(
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(users.router, prefix="/api/users", tags=["users"])
 app.include_router(meetings.router, prefix="/api/meetings", tags=["meetings"])
+app.include_router(participants.router, prefix="/api", tags=["participants"])
 
 @app.on_event("startup")
 async def startup_event():

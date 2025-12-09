@@ -12,21 +12,23 @@ import { MeetingCard } from '../../components/ui/MeetingCard'
 import MeetingCardSkeleton from '../../components/ui/MeetingCardSkeleton'
 //===== assets =====//
 import { LuCircleUserRound } from "react-icons/lu"
+import useTranslations from '../../lib/useTranslations'
 
 const Page = () => {
   const { user } = useStore()
   const [activeTab, setActiveTab] = useState('my')
   const [isLoading, setIsLoading] = useState(false)
   const [visibleCount, setVisibleCount] = useState(10)
+  const t = useTranslations()
 
   // Статусы (те же что на главной)
   const statuses = [
-    { value: 'all', label: 'Все', color: 'bg-gray-500' },
-    { value: 'planned', label: 'Запланированные', color: 'bg-yellow-500' },
-    { value: 'active', label: 'Активные', color: 'bg-blue-400' },
-    { value: 'completed', label: 'Завершенные', color: 'bg-green-400' },
-    { value: 'cancelled', label: 'Отмененные', color: 'bg-red-400' },
-    { value: 'postponed', label: 'Перенесенные', color: 'bg-orange-400' }
+    { value: 'all', label: t('meetings.all'), color: 'bg-gray-500' },
+    { value: 'planned', label: t('meetings.planned'), color: 'bg-yellow-500' },
+    { value: 'active', label: t('meetings.active'), color: 'bg-blue-400' },
+    { value: 'completed', label: t('meetings.completed'), color: 'bg-green-400' },
+    { value: 'cancelled', label: t('meetings.cancelled'), color: 'bg-red-400' },
+    { value: 'postponed', label: t('meetings.postponed'), color: 'bg-orange-400' }
   ]
   const [filter, setFilter] = useState('all')
 
@@ -116,7 +118,7 @@ const Page = () => {
           href='/profile/edit' 
           className='px-6 py-2.5 rounded-lg bg-[var(--bg-accent)] text-white hover:opacity-90 transition-opacity whitespace-nowrap'
         >
-          Настройки
+          {t('settings.title')}
         </Link>
       </div>
 
@@ -131,7 +133,7 @@ const Page = () => {
                 : 'bg-[var(--bg-secondary)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]'
             }`}
           >
-            Мои мероприятия
+            {t('meetings.myMeetings')}
             <span className='ml-2 text-sm opacity-90'>
               ({user?.created_meetings?.length || 0})
             </span>
@@ -145,7 +147,7 @@ const Page = () => {
                 : 'bg-[var(--bg-secondary)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]'
             }`}
           >
-            Групповые мероприятия
+            {t('meetings.groupMeetings')}
             <span className='ml-2 text-sm opacity-90'>
               ({user?.participating_meetings?.length || 0})
             </span>

@@ -66,7 +66,7 @@
     "blue": "Blue",
     "emerald": "Emerald"
   },
-    "header": {
+  "header": {
     "home": "Home",
     "meetings": "Meetings",
     "settings": "Settings",
@@ -77,7 +77,7 @@
     "changeLanguage": "Change language",
     "logoutError": "Logout error:"
   },
-    "footer": {
+  "footer": {
       "rightsReserved": "All rights reserved."
   },
   "meetings": {
@@ -153,6 +153,26 @@
     "addressPlaceholder": "e.g., Lenin St., 15 or Zoom link",
     "statusSection": "Meeting Status",
     "saving": "Saving...",
-    "saveChanges": "Save Changes"
+    "saveChanges": "Save Changes",
+    "groupMeetings": "Group Meetings"
+  },
+  "participants": {
+    "title": "Participants",
+    "addParticipant": "Add participant",
+    "searchPlaceholder": "Start typing name or email...",
+    "noResults": "No users found",
+    "statusPending": "Pending",
+    "statusAccepted": "Accepted",
+    "statusDeclined": "Declined",
+    "count": "{{count}} participants",
+    "remove": "Remove",
+    "addedSuccess": "Participant added",
+    "addAnother": "Add another",
+    "noParticipants": "No participants yet",
+    "onlyCreatorCanAdd": "Only meeting creator can add participants"
+  },
+  "userSearch": {
+    "loading": "Searching...",
+    "selectUser": "Select user"
   }
 }
